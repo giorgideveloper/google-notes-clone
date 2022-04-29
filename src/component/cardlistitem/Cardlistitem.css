@@ -1,0 +1,11 @@
+.spiner{
+  height:100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.spiners{
+  width:100px;
+  height:100px;
+  color:rgb(255, 230, 0);
+}
