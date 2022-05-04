@@ -2,15 +2,17 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import { CardActionArea, CardActions } from '@mui/material';
 import './Listitem.css';
 import { Button, FloatingLabel, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
 import { useRef, useState } from 'react';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Swal from 'sweetalert2';
+import index from '../../helpers';
 
 function Listitem(props) {
 	const [show, setShow] = React.useState(false);
-
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 	const [title, setTitle] = useState('');
@@ -18,6 +20,19 @@ function Listitem(props) {
 	const post_title = useRef(null);
 	const post_description = useRef(null);
 
+	const DeleteItem = () => {
+		axios
+			.delete(`https://keep.jrwebdeveloper.com/api/notes/${props.note.id}`)
+			.then(res => {
+				index();
+				Swal.fire(`${props.note.title}`, 'Deleted', 'success');
+				window.location.reload(false);
+			})
+			.catch(console.error());
+	};
+	React.useEffect(() => {
+		console.log('effect');
+	});
 	const postData = e => {
 		e.preventDefault();
 		axios
@@ -28,26 +43,30 @@ function Listitem(props) {
 				color: props.note.color,
 				pinned: props.note.pinned,
 			})
-			.then(res => console.log('psot data', res))
+			.then(res => {
+				Swal.fire(`${post_title.current.value}`, 'Updated', 'success');
+				window.location.reload(false);
+			})
 			.catch(err => console.log(err));
 	};
 	return (
 		<>
-			<div variant='' onClick={handleShow}>
-				<Card className='cards h-100' sx={{ maxWidth: 345, maxHeight: 500 }}>
-					<CardActionArea>
-						<CardContent>
-							<Typography gutterBottom variant='h5' component='div'>
-								{props.note.title.toUpperCase()}
-							</Typography>
+			<Card className='cards' sx={{ maxWidth: 345, maxHeight: 500 }}>
+				<CardActionArea>
+					<CardContent onClick={handleShow}>
+						<Typography gutterBottom variant='h5' component='div'>
+							{props.note.title.toUpperCase()}
+						</Typography>
 
-							<Typography variant='body2' color='text.secondary'>
-								{props.note.description}
-							</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-			</div>
+						<Typography variant='body2' color='text.secondary'>
+							{props.note.description}
+						</Typography>
+					</CardContent>
+					<CardActions>
+						<DeleteForeverIcon onClick={DeleteItem} />
+					</CardActions>
+				</CardActionArea>
+			</Card>
 
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>

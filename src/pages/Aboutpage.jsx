@@ -1,6 +1,6 @@
-import React from 'react';
 import Carditem from '../component/carditem/Carditem';
 import './About.css';
+import AddCardItem from '../component/addcarditem/AddCardItem';
 function Aboutpage() {
 	return (
 		<div>

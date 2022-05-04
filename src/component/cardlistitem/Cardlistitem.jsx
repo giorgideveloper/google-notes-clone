@@ -4,6 +4,7 @@ import Listitem from '../listitem/Listitem';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as ReactBootstrap from 'react-bootstrap';
 import './Cardlistitem.css';
+import AddCardItem from '../addcarditem/AddCardItem';
 
 function Cardlistitem() {
 	const [post, setPost] = React.useState(null);
@@ -32,8 +33,13 @@ function Cardlistitem() {
 		setPostfn();
 	}, []);
 
+	const moveData = personalData => {
+		console.log(personalData);
+	};
+
 	return (
 		<>
+			<AddCardItem onMoveData={moveData} />;
 			{loading ? (
 				post
 			) : (
