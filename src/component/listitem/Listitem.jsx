@@ -19,6 +19,9 @@ function Listitem(props) {
 	const [description, setDescription] = useState('');
 	const post_title = useRef(null);
 	const post_description = useRef(null);
+	const [item, setItem] = useState('');
+	const [itemDes, setItemDes] = useState('');
+	const [load, setLoad] = useState(false);
 
 	const DeleteItem = () => {
 		axios
@@ -30,9 +33,7 @@ function Listitem(props) {
 			})
 			.catch(console.error());
 	};
-	React.useEffect(() => {
-		console.log('effect');
-	});
+
 	const postData = e => {
 		e.preventDefault();
 		axios
@@ -45,21 +46,31 @@ function Listitem(props) {
 			})
 			.then(res => {
 				Swal.fire(`${post_title.current.value}`, 'Updated', 'success');
-				window.location.reload(false);
+				setLoad(true);
+				setShow(false);
 			})
 			.catch(err => console.log(err));
 	};
+	const showInput = e => {
+		e.preventDefault();
+		setItem(e.target.value);
+	};
+	const showInputs = e => {
+		e.preventDefault();
+		setItemDes(e.target.value);
+	};
+
 	return (
 		<>
 			<Card className='cards' sx={{ maxWidth: 345, maxHeight: 500 }}>
 				<CardActionArea>
 					<CardContent onClick={handleShow}>
 						<Typography gutterBottom variant='h5' component='div'>
-							{props.note.title.toUpperCase()}
+							{load ? item : props.note.title}
 						</Typography>
 
 						<Typography variant='body2' color='text.secondary'>
-							{props.note.description}
+							{load ? itemDes : props.note.description}
 						</Typography>
 					</CardContent>
 					<CardActions>
@@ -74,6 +85,7 @@ function Listitem(props) {
 						defaultValue={props.note.title}
 						onChange={e => setTitle(e.target.defaultValue)}
 						ref={post_title}
+						onInput={showInput}
 					/>
 				</Modal.Header>
 				<Modal.Body>
@@ -85,6 +97,7 @@ function Listitem(props) {
 							placeholder='Description'
 							style={{ height: '100px' }}
 							ref={post_description}
+							onInput={showInputs}
 						></Form.Control>
 					</FloatingLabel>
 				</Modal.Body>

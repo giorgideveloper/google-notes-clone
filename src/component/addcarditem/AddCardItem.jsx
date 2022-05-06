@@ -1,6 +1,6 @@
 import { Form, Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Box } from '@mui/system';
 import { SpeedDial, SpeedDialIcon } from '@mui/material';
 import axios from 'axios';
@@ -25,7 +25,7 @@ function Example(props) {
 			})
 			.then(res => {
 				Swal.fire(`${post_title.current.value}`, 'Added', 'success');
-				window.location.reload(false);
+				setShow(false);
 			})
 			.catch(err => console.log(err));
 	};
