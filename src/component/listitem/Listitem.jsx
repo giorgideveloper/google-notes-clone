@@ -10,19 +10,19 @@ import { useRef, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Swal from 'sweetalert2';
 import index from '../../helpers';
+import CircleIcon from '@mui/icons-material/Circle';
 
 function Listitem(props) {
 	const [show, setShow] = React.useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
+	const [title, setTitle] = useState(false);
+	const [description, setDescription] = useState(false);
 	const post_title = useRef(null);
 	const post_description = useRef(null);
 	const [item, setItem] = useState('');
 	const [itemDes, setItemDes] = useState('');
-	const [load, setLoad] = useState(false);
-
+	const [color, setColor] = useState('');
 	const DeleteItem = () => {
 		axios
 			.delete(`https://keep.jrwebdeveloper.com/api/notes/${props.note.id}`)
@@ -46,7 +46,6 @@ function Listitem(props) {
 			})
 			.then(res => {
 				Swal.fire(`${post_title.current.value}`, 'Updated', 'success');
-				setLoad(true);
 				setShow(false);
 			})
 			.catch(err => console.log(err));
@@ -60,21 +59,40 @@ function Listitem(props) {
 		setItemDes(e.target.value);
 	};
 
+	let colors = ['red', 'green', 'blue', 'alpha'];
+
+	const changeColor = e => {
+		e.preventDefault();
+		<CircleIcon color />;
+	};
+
 	return (
 		<>
-			<Card className='cards' sx={{ maxWidth: 345, maxHeight: 500 }}>
+			<Card
+				className='cards'
+				color='red'
+				sx={{ maxWidth: 345, maxHeight: 500 }}
+			>
 				<CardActionArea>
 					<CardContent onClick={handleShow}>
-						<Typography gutterBottom variant='h5' component='div'>
-							{load ? item : props.note.title}
+						<Typography
+							gutterBottom
+							variant='h5'
+							color='text.secondary'
+							component='div'
+						>
+							{title ? item : props.note.title}
 						</Typography>
 
 						<Typography variant='body2' color='text.secondary'>
-							{load ? itemDes : props.note.description}
+							{description ? itemDes : props.note.description}
 						</Typography>
 					</CardContent>
 					<CardActions>
 						<DeleteForeverIcon onClick={DeleteItem} />
+						{colors.map(e => (
+							<CircleIcon key={e} color={e} onClick={changeColor} />
+						))}
 					</CardActions>
 				</CardActionArea>
 			</Card>
@@ -83,7 +101,7 @@ function Listitem(props) {
 				<Modal.Header closeButton>
 					<Form.Control
 						defaultValue={props.note.title}
-						onChange={e => setTitle(e.target.defaultValue)}
+						onChange={e => setTitle(true)}
 						ref={post_title}
 						onInput={showInput}
 					/>
@@ -92,7 +110,7 @@ function Listitem(props) {
 					<FloatingLabel controlId='floatingTextarea2' label=''>
 						<Form.Control
 							defaultValue={props.note.description}
-							onChange={e => setDescription(e.target.defaultValue)}
+							onChange={e => setDescription(true)}
 							as='textarea'
 							placeholder='Description'
 							style={{ height: '100px' }}

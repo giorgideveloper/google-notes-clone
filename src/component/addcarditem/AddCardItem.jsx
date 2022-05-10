@@ -8,7 +8,6 @@ import Swal from 'sweetalert2';
 
 function Example(props) {
 	const [show, setShow] = useState(false);
-
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 	const post_title = useRef(null);
